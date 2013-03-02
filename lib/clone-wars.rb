@@ -1,4 +1,4 @@
-require "clone-wars/engine"
+require 'clone-wars/engine'
 
 require 'clone-wars/version'
 
@@ -9,6 +9,35 @@ require 'active_support/concern'
 module CloneWars
 
   ##
+  #
+  module ModelBase
+    ##
+    # Add an index for each of these columns as they are used together often.
+    #
+    # === Example
+    #
+    # In your model file:
+    #
+    #   class User < ActiveRecord::Base
+    #     self.duplicate_matchers = %w(first_name last_name birthdate).map(&:to_sym)
+    #     ...
+    #   end
+    #
+    # And in your migration:
+    #
+    #   add_index :users, [:first_name, :last_name, :birthdate]
+    #
+    # The order by which your composite index is defined should match that of
+    # your class attribute value.
+
+    def clone_wars(*attr_list)
+      include CloneWars::Model
+      class_attribute :duplicate_matchers, instance_writer: false
+      self.duplicate_matchers = attr_list.map(&:to_sym) # Replace me in your models.
+    end
+  end
+
+  ##
   # == Model
   #
   # This is the module to include within your ActiveRecord::Base class
@@ -17,28 +46,6 @@ module CloneWars
     extend ActiveSupport::Concern
 
     included do
-
-      ##
-      # Add an index for each of these columns as they are used together often.
-      #
-      # === Example
-      #
-      # In your model file:
-      #
-      #   class User < ActiveRecord::Base
-      #     self.duplicate_matchers = %w(first_name last_name birthdate).map(&:to_sym)
-      #     ...
-      #   end
-      #
-      # And in your migration:
-      #
-      #   add_index :users, [:first_name, :last_name, :birthdate]
-      #
-      # The order by which your composite index is defined should match that of
-      # your class attribute value.
-      class_attribute :duplicate_matchers
-      self.duplicate_matchers = %w(id).map(&:to_sym) # Replace me in your models.
-
       ##
       # === Example
       #
@@ -54,10 +61,11 @@ module CloneWars
       #       #<User id: 7 name: 'tylerdurden', code: 1 ..>,
       #       #<User id: 8 name: 'tyler durden', code: 1 ..>]
       scope :duplicate, ->(opts = {}) {
-        select("#{quoted_table_name}.*").uniq.from(arel_table.alias).
-        joins("INNER JOIN #{quoted_table_name} USING (#{duplicate_matchers * ','})").
-        where(arel_table[:id].not_eq(arel_table.alias[:id])).
-        order(:id).
+        select("`#{table_name}`.*").uniq.from("`#{table_name}` a2").
+        joins("INNER JOIN `#{table_name}` USING (#{duplicate_matchers * ','})").
+        # where(arel_table[:id].not_eq(arel_table.alias[:id])).
+        where("`#{table_name}`.`id` != `a2`.`id`").
+        order("`#{table_name}`.`id`").
         limit(opts[:force] ? nil : 0)
       } do
 
@@ -68,7 +76,7 @@ module CloneWars
         #   # => [#<User id: 1 name: 'Bruce Wayne', code: nil ..>,
         #         #<User id: 3 name: 'Syrio Forel', code: 50 died_on: "2013-03-01" ..>]
         def originals
-          except(:limit).where(arel_table.alias[:id].gt(arel_table[:id]))
+          except(:limit).group(duplicate_matchers).having("`#{table_name}`.`id` = MIN(`#{table_name}`.`id`)")
         end
 
         ##
@@ -78,7 +86,7 @@ module CloneWars
         #   # => [#<User id: 2 name: 'Bruce Wayne', code: nil ..>,
         #         #<User id: 4 name: 'syrio forel', code: 50 died_on: nil ..>]
         def copies
-          except(:limit).where(arel_table.alias[:id].lt(arel_table[:id]))
+          except(:limit).where("`a2`.`id` < `#{table_name}`.`id`")
         end
       end
     end
@@ -94,8 +102,8 @@ module CloneWars
       #   User.find_duplicates_for(user)
       #   # => [#<User id: 2 ..>]
       def find_duplicates_for(item)
-        where(item.duplicate_conditions).
-        where(arel_table[:id].not_eq(item.id))
+        where(item._duplicate_conditions).
+        where("`#{table_name}`.`id` != ?", item.id)
       end
     end
 
@@ -106,10 +114,8 @@ module CloneWars
     #
     #   <%= render partial: 'user/duplicate', collection: @user.duplicates %>
     def duplicates
-      self.class.duplicates_for(self)
+      self.class.find_duplicates_for(self)
     end
-
-    private
 
     # Returns a hash meant to be used as a parameter to the query method
     # `where(..)`. To clarify the return value, if your model was set up like
@@ -142,7 +148,7 @@ module CloneWars
     # Since the return of this method is simply injected into the `where` method,
     # you could override this method and, theoretically, do something as follows:
     #
-    #   def duplicate_conditions
+    #   def _duplicate_conditions
     #     ["first_name = ?, middle_name = ?, last_name = ?", *full_name.split]
     #   end
     #
@@ -163,14 +169,14 @@ module CloneWars
     #
     #     # Custom overrides:
     #     module MyCloneWars
-    #       def duplicate_conditions
+    #       def _duplicate_conditions
     #         @temporary_conditions || super
     #       end
     #     end
     #     include MyCloneWars
     #     ..
     #   end
-    def duplicate_conditions
+    def _duplicate_conditions
       Hash[duplicate_matchers.map { |col| [col, send(col)] }]
     end
   end
