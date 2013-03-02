@@ -20,7 +20,7 @@ module CloneWars
     #
     #   class User < ActiveRecord::Base
     #     self.duplicate_matchers = %w(first_name last_name birthdate).map(&:to_sym)
-    #     ...
+    #     ..
     #   end
     #
     # And in your migration:
@@ -29,7 +29,6 @@ module CloneWars
     #
     # The order by which your composite index is defined should match that of
     # your class attribute value.
-
     def clone_wars(*attr_list)
       include CloneWars::Model
       class_attribute :duplicate_matchers, instance_writer: false
@@ -63,7 +62,6 @@ module CloneWars
       scope :duplicate, ->(opts = {}) {
         select("`#{table_name}`.*").uniq.from("`#{table_name}` a2").
         joins("INNER JOIN `#{table_name}` USING (#{duplicate_matchers * ','})").
-        # where(arel_table[:id].not_eq(arel_table.alias[:id])).
         where("`#{table_name}`.`id` != `a2`.`id`").
         order("`#{table_name}`.`id`").
         limit(opts[:force] ? nil : 0)
@@ -126,17 +124,20 @@ module CloneWars
     #   class User < ActiveRecord::Base
     #     include CloneWars::Model
     #     self.duplicate_matchers = [:last_name, :ssn]
-    #     ...
+    #     ..
+    #
+    #     # or
+    #
+    #     clone_wars :last_name, :ssn # via engines
+    #     ..
     #   end
     #
     # Then when you call a method utilizing this helper, such as
     # `User#duplicates`:
     #
-    #   @user.last_name
-    #   # => 'Wayne'
+    #   @user.last_name # => 'Wayne'
     #
-    #   @user.ssn
-    #   # => '987-65-321'
+    #   @user.ssn # => '987-65-321'
     #
     #   @user.duplicates
     #

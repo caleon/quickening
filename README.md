@@ -24,12 +24,24 @@ And then execute:
 $ bundle
 ```
 
-Setup your model:
+Setup your model one way (the old way):
+
+```ruby
+require 'clone-wars'
+
+class User < ActiveRecord::Base
+  include CloneWars::Model
+  self.duplicate_matchers = %w(name code).map(&:to_sym)
+  ..
+end
+```
+
+...or the other way (new way, using Rails Engines):
 
 ```ruby
 class User < ActiveRecord::Base
-  self.duplicate_matchers = %w(name code).map(&:to_sym)
-  ...
+  clone_wars :name, :code
+  ..
 end
 ```
 
@@ -52,8 +64,8 @@ The order by which your composite index is defined should match that of your cla
 > User.duplicate(force: true)
 # => [#<User id: 1 name: 'Bruce Wayne', code: nil ..>,
       #<User id: 2 name: 'Bruce Wayne', code: nil ..>,
-      #<User id: 3 name: 'Syrio Forel', code: 50 died_on: "2013-03-01" ..>,
-      #<User id: 4 name: 'syrio forel', code: 50 died_on: nil ..>,
+      #<User id: 3 name: 'Syrio Forel', code: 50, died_on: "2013-03-01" ..>,
+      #<User id: 4 name: 'syrio forel', code: 50, died_on: nil ..>,
       #<User id: 5 name: 'Marla Singer', code: 32 ..>,
       #<User id: 7 name: 'tylerdurden', code: 1 ..>,
       #<User id: 8 name: 'tyler durden', code: 1 ..>]
@@ -73,7 +85,7 @@ Obviously you can override this yourself with something like `except(:limit)` or
 ```ruby
 > User.duplicate.originals
 # => [#<User id: 1 name: 'Bruce Wayne', code: nil ..>,
-      #<User id: 3 name: 'Syrio Forel', code: 50 died_on: "2013-03-01" ..>]
+      #<User id: 3 name: 'Syrio Forel', code: 50, died_on: "2013-03-01" ..>]
 ```
 
 So far as this initial version is concerned, the "originality" is determined by returning the record with the lowest ID among the matches. Also, it is not concerned a duplicate-original if it is a unique record to begin with.
@@ -93,7 +105,7 @@ For the sake of clarity, there should later be an aptly-named method for such in
 ```ruby
 > User.duplicate.copies
 # => [#<User id: 2 name: 'Bruce Wayne', code: nil ..>,
-      #<User id: 4 name: 'syrio forel', code: 50 died_on: nil ..>]
+      #<User id: 4 name: 'syrio forel', code: 50, died_on: nil ..>]
 ```
 
 This can otherwise be described as the set of all duplicated records without the original records:
@@ -105,7 +117,7 @@ This can otherwise be described as the set of all duplicated records without the
 
 ## Future
 
-1. Consider a class method as an alternative to requiring-including-setting.
+1. ~~Consider a class method as an alternative to requiring-including-setting.~~
 2. Lower the version dependency for Rails (indirectly via ActiveRecord/ActiveSupport)
 3. *Perhaps* rewrite hash syntaxes to allow Ruby 1.8 compatibility...
 4. Write more utility functions for dealing with duplicates.

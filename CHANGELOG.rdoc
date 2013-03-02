@@ -1,0 +1,26 @@
+== 0.0.2
+
+* Features
+  * No longer need to require/include/set things to integrate with your model. Instead you can call the class method +clone_wars(..)+
+  * Setting up Rails Engine hooks into the Rails load process
+  * Significant improvement of SQL logic for determining whether or not records are duplicates
+  * Much safer way of determining subsets of the overarching query
+
+* Maintenance
+  * Improved spec coverage over core queries
+  * Setup for upcoming usage of simplecov
+  * Some adjustments to spec_helper and Guardfile for Spork (still need to finish defining reload-hooks for Spork-Guard)
+  * Push to GitHub
+  * Integration with FactoryGirl for testing
+  * Dummy app linked for better coverage with an actual app
+
+* Bugfixes
+  * Typos and minutiae in documentation
+  * Query for selecting just the originals of duplicates was flawed and unreliable
+
+== 0.0.1
+
+* Initial release
+  * Set up of the engine structure, hierarchy of folders, etc.
+  * Ironing out gemspec having given up integrating Jeweler.
+  * Integration of RSpec, Guard, Spork, testing frameworks in general.
