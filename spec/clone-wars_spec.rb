@@ -378,6 +378,7 @@ describe 'Dummy App' do
       @users = FactoryGirl.create_list(:user, 10, first_name: 'John',
                                                    last_name: 'Malkovich')
     end
+
     after(:all) { User.delete_all }
 
     describe User do
@@ -395,11 +396,10 @@ describe 'Dummy App' do
         end
 
         describe '.originals' do
-          let(:returned) { klass.duplicate.originals }
           include_context 'Proper .originals results'
           it_behaves_like 'Non-empty relational collections'
 
-          it 'is composed of records for which exactly one counterpart exists outside of this set' do
+          it 'is composed of one record for which exactly nine counterparts exist outside of this set' do
             returned.each do |record|
               dupe, * = dupes = record.duplicates
               expect(dupes).to have(9).records
@@ -408,6 +408,47 @@ describe 'Dummy App' do
             end
           end
         end
+
+        describe '.copies' do
+          include_context 'Proper .copies results'
+          it_behaves_like 'Non-empty relational collections'
+          it { should have(9).records }
+
+          it 'is composed of records for which exactly one counterpart exists outside of this set' do
+            returned.each do |record|
+              dupe, * = dupes = record.duplicates
+              expect(dupes).to have(9).records
+              expect(record).not_to be_in User.duplicate.originals
+            end
+          end
+        end
+      end
+
+      describe '.find_duplicates_for' do
+        include_context 'Proper .find_duplicates_for results'
+        it_behaves_like 'Non-empty relational collections'
+
+        it { should have(9).records }
+        it { should_not include user }
+      end
+
+      describe '#duplicates' do
+        include_context 'Proper #duplicates results'
+        it_behaves_like 'Non-empty relational collections'
+
+        it { should have(9).records }
+        it { should_not include user }
+
+        it 'contains records, each of which refer this record as one of its duplicates' do
+          returned.each do |record|
+            expect(record.duplicates).to have(9).records
+            expect(record.duplicates).to include user
+          end
+        end
+      end
+
+      describe '#_duplicate_conditions' do
+        include_context 'Proper #_duplicate_conditions results'
       end
     end
   end
