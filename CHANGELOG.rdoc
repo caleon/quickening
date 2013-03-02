@@ -1,3 +1,18 @@
+== 0.0.3
+
+* Maintenance
+  * RDoc inline documentation in code
+  * Removing various extraneous development dependencies in gemspec
+  * Cleaning out commented-out code
+  * Separating ActiveRecord extension to ORM file
+  * Extracting shared spec behaviors to spec/support
+  * Correctly requiring the spec/support files
+  * UTF-8 encoding designations
+  * Preparing Rake task namespace
+  * Preparing base-module level setups
+  * Corrected mislinked script/rails
+  * Preparing integration with an actual app
+
 == 0.0.2
 
 * Features

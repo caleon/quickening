@@ -1,4 +1,4 @@
-notification :growl, sticky: false, host: '127.0.0.1'
+# notification :growl, sticky: false, host: '127.0.0.1'
 
 guard 'spork', rspec_env: { 'RAILS_ENV' => 'test' }, cucumber_env: { 'RAILS_ENV' => 'test' },
                rspec: true, cucumber: false, test_unit: false do

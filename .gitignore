@@ -2,6 +2,7 @@ coverage
 coverage.data
 rdoc
 doc
+.rvmrc
 .yardoc
 .bundle/
 log/*.log

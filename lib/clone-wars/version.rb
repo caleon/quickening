@@ -1,3 +1,5 @@
-module CloneWars
-  VERSION = "0.0.2"
+# encoding: utf-8
+
+module CloneWars # :nodoc:
+  VERSION = "0.0.3"
 end

@@ -28,12 +28,6 @@ Bundler::GemHelper.install_tasks
 
 Dir[File.join(File.dirname(__FILE__), 'tasks/**/*.rake')].each { |f| load f }
 
-
-# RSpec::Core::RakeTask.new(:rcov) do |spec|
-#   spec.pattern = 'spec/**/*_spec.rb'
-#   spec.rcov = true
-# end
-
 require 'rspec/core'
 require 'rspec/core/rake_task'
 
