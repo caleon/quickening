@@ -1,3 +1,11 @@
+== 0.1.0
+
+* Bugfix
+  * Results were looking correct for the total set <tt>User.duplicate(force: true)</tt> and <tt>User.duplicate.copies</tt> but there were no results returned for <tt>User.duplicate.originals</tt>. Re-oriented the direction of the joins to be more straightforward and now the results have been consistent from my tests against data.
+
+* Todo
+  * Come up with a less silly name?
+
 == 0.0.3
 
 * Maintenance
@@ -16,7 +24,7 @@
 == 0.0.2
 
 * Features
-  * No longer need to require/include/set things to integrate with your model. Instead you can call the class method +clone_wars(..)+
+  * No longer need to require/include/set things to integrate with your model. Instead you can call the class method <tt>clone_wars(..)</tt>
   * Setting up Rails Engine hooks into the Rails load process
   * Significant improvement of SQL logic for determining whether or not records are duplicates
   * Much safer way of determining subsets of the overarching query
