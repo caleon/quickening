@@ -140,5 +140,4 @@ This can otherwise be described as the set of all duplicated records without the
 
 ## Copyright
 
-Copyright (c) 2013 caleon. See LICENSE.txt for
-further details.
+Copyright (c) 2013 caleon. See MIT-LICENSE for further details.

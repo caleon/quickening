@@ -19,9 +19,12 @@ Gem::Specification.new do |s|
     Beyond the abstracted query methods for searching efficiently throughout the table (but only tested against MySQL 5.5, sorry), your models gain access to methods for dispending with duplicates, chores varying in complexity ranging from the trivial deletes to customizable merges (future feature).
   EOD
 
-  s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.md"]
+  s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.md", "CHANGELOG.rdoc"]
 
-  s.add_dependency "rails", "~> 3.2.12"
+  s.required_ruby_version '>= 1.9.2'
+
+  s.add_dependency 'rails', '~> 3.2.12'
+  s.add_dependency 'activerecord', '~> 3.2.12'
   # s.add_dependency "jquery-rails"
 
   s.add_development_dependency "sqlite3"

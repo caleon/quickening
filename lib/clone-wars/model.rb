@@ -11,6 +11,41 @@ module CloneWars
     extend ActiveSupport::Concern
 
     included do
+      # The <tt>limit(0)</tt> default exists now to prevent any inadvertent calls
+      # to what would amount to a very taxing call, for those on an app hooked
+      # to a large database. Besides, there is more utility to be had when
+      # following the scope call with one of the extensions.
+      #
+      #--
+      # I have avoided the practice of using a join table to create a self-
+      # referential association. Barring significant reasons to do so, a simple
+      # alias to itself appears to hold more promise of an elegant solution.
+      # Obviously there is a limit to how far SQL alone can go in terms of
+      # providing us an efficient way to query these things, and those options
+      # will be explored over time.
+      #
+      # In v0.0.1 the ARel methods and objects were directly utilized to avoid
+      # needing to hardcode table alias names. But even if that worked
+      # swimmingly as far as ARel was concerned, the interplay between it and
+      # ActiveRecord rendered these methods ineffective or even broken. Ended
+      # up interpolating code directly into strings, for a later time when a
+      # better solution is pursued.
+      #
+      # Also it's worth considering making +duplicate_matchers+ unwritable even
+      # at the class level once it's been set via +clone_wars+. The fact that it
+      # would be inserted as a raw string in the midst of a query is undesirable
+      # from a security standpoint.
+      #++
+      #
+      # Note the scope name is not pluralized ("duplicate", not "duplicates"),
+      # and a good way to think of this is to think of the word as an adjective
+      # to deocorate either of the follow-up methods.
+      #
+      # There is a degree of caution required when depending on these scopes and
+      # methods. Note that the <tt>#originals</tt> method performs a grouping
+      # query, and depending on your usage, it may interject its own overriding
+      # SELECT statements or table/column aliases.
+      #
       # === Examples
       #
       #   User.duplicate # => []
@@ -32,11 +67,17 @@ module CloneWars
       } do
 
         ##
+        # Returns a collection of all originals within each respective set of
+        # duplicates. Make sure that part was clear. A read of the RSpec tests
+        # with the "documentation" formatter may be assistive in clarifying the
+        # intend of these methods.
+        #
         #   User.duplicate.originals
         #   # => [#<User id: 1 name: 'Bruce Wayne', code: nil ..>,
         #         #<User id: 3 name: 'Syrio Forel', code: 50 died_on: "2013-03-01" ..>]
         def originals
-          except(:limit).group(duplicate_matchers).having("`#{table_name}`.`id` = MIN(`#{table_name}`.`id`)")
+          except(:limit).group(duplicate_matchers).
+            having("`#{table_name}`.`id` = MIN(`#{table_name}`.`id`)")
         end
 
         ##
@@ -50,7 +91,6 @@ module CloneWars
     end
 
     module ClassMethods #:nodoc:
-
       # Looks for other records in the same table for items matching on all
       # pre-defined columns. This has little benefit of usage except to act as
       # a proxy for the instance-level methods, such as <tt>#duplicates</tt>.
@@ -76,7 +116,7 @@ module CloneWars
     # this:
     #
     #   class User < ActiveRecord::Base
-    #     clone_wars :last_name, :ssn # via engines
+    #     clone_wars :last_name, :ssn
     #     ..
     #   end
     #

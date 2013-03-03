@@ -12,6 +12,5 @@ module CloneWars # :nodoc:
         require 'clone-wars/orm/active_record'
       end
     end
-
   end
 end
