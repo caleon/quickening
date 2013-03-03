@@ -60,7 +60,7 @@ module CloneWars
       #       #<User id: 8 name: 'tyler durden', code: 1 ..>]
       scope :duplicate, ->(opts = {}) {
         select("`#{table_name}`.*").uniq.from("`#{table_name}` a2").
-        joins("INNER JOIN `#{table_name}` USING (#{duplicate_matchers * ','})").
+        joins("INNER JOIN `#{table_name}` USING (#{duplicate_matchers * ', '})").
         where("`#{table_name}`.`id` != `a2`.`id`").
         order("`#{table_name}`.`id`").
         limit(opts[:force] ? nil : 0)
@@ -76,7 +76,7 @@ module CloneWars
         #   # => [#<User id: 1 name: 'Bruce Wayne', code: nil ..>,
         #         #<User id: 3 name: 'Syrio Forel', code: 50 died_on: "2013-03-01" ..>]
         def originals
-          except(:limit).group(duplicate_matchers).
+          except(:limit).uniq(false).group(duplicate_matchers).
             having("`#{table_name}`.`id` = MIN(`#{table_name}`.`id`)")
         end
 
