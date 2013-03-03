@@ -1,17 +1,17 @@
 # encoding: utf-8
 
-require 'clone-wars/engine'
-require 'clone-wars/version'
+require 'quickening/engine'
+require 'quickening/version'
 require 'active_support/dependencies'
 
 ##
-# = CloneWars
+# = the Quickening
 #
 # Please refer to the README file for documentation that is more likely to be
 # up-to-date.
-module CloneWars
+module Quickening
 
-  autoload :Model, 'clone-wars/model'
+  autoload :Model, 'quickening/model'
 
   # Settings forthcoming
 end

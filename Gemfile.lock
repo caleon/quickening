@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    clone-wars (0.0.3)
+    quickening (0.1.0)
       activerecord (~> 3.2.12)
       rails (~> 3.2.12)
 
@@ -154,12 +154,12 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  clone-wars!
   factory_girl_rails
   faker
   guard-rspec
   guard-spork
   jquery-rails
+  quickening!
   rspec-rails (>= 2.12)
   ruby-prof
   simplecov

@@ -1,6 +1,6 @@
-# CloneWars
+# the Quickening
 
-CloneWars is a Rails gem for adding to your model a facility to query and manage duplicate records. It's been written to remain relatively abstract and adaptable to various models, and so the library should be an easy plugin for models you may have set up already (barring name clashes).
+Quickening is a Rails gem for adding to your model a facility to query and manage duplicate records. It's been written to remain relatively abstract and adaptable to various models, and so the library should be an easy plugin for models you may have set up already (barring name clashes).
 
 Beyond the abstracted query methods for searching efficiently throughout the table (but only tested against MySQL 5.5, sorry), your models gain access to methods for dispending with duplicates, chores varying in complexity ranging from the trivial deletes to customizable merges (future feature).
 
@@ -15,7 +15,9 @@ But if you see the utility of this sort of gem, please feel free to contribute a
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'clone-wars', github: 'caleon/clone-wars'
+gem 'quickening'
+# or for edge
+gem 'quickening', github: 'caleon/quickening'
 ```
 
 And then execute:
@@ -27,10 +29,10 @@ $ bundle
 Setup your model one way (the old way):
 
 ```ruby
-require 'clone-wars'
+require 'quickening'
 
 class User < ActiveRecord::Base
-  include CloneWars::Model
+  include Quickening::Model
   self.duplicate_matchers = %w(name code).map(&:to_sym)
   ..
 end
@@ -40,7 +42,7 @@ end
 
 ```ruby
 class User < ActiveRecord::Base
-  clone_wars :name, :code
+  quickening :name, :code
   ..
 end
 ```
@@ -128,7 +130,7 @@ This can otherwise be described as the set of all duplicated records without the
 9. Controller at the engine- or Rack- level for pre-made administrative interface for managing and reporting duplicates.
 10. Ability to turn on caching of duplicates per model instance.
 
-## Contributing to clone-wars
+## Contributing to the Quickening
 
 * Check out the latest master to make sure the feature hasn't been implemented or the bug hasn't been fixed yet.
 * Check out the issue tracker to make sure someone already hasn't requested it and/or contributed it.

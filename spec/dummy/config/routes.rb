@@ -1,4 +1,4 @@
 Rails.application.routes.draw do
 
-  mount CloneWars::Engine => "/clone-wars"
+  mount Quickening::Engine => "/quickening"
 end

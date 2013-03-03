@@ -3,18 +3,18 @@
 $:.push File.expand_path("../lib", __FILE__)
 
 # Maintain your gem's version:
-require "clone-wars/version"
+require "quickening/version"
 
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
-  s.name        = 'clone-wars'
-  s.version     = CloneWars::VERSION
+  s.name        = 'quickening'
+  s.version     = Quickening::VERSION
   s.authors     = ['caleon']
   s.email       = ['caleon@gmail.com']
-  s.homepage    = 'https://github.com/caleon/clone-wars'
-  s.summary     = %Q{CloneWars is a Rails gem for adding to your model a facility to query and manage duplicate records.}
+  s.homepage    = 'https://github.com/caleon/quickening'
+  s.summary     = %Q{Quickening is a Rails gem for adding to your model a facility to query and manage duplicate records.}
   s.description = <<-EOD
-    CloneWars is a Rails gem for adding to your model a facility to query and manage duplicate records. It's been written to remain relatively abstract and adaptable to various models, and so the library should be an easy plugin for models you may have set up already (barring name clashes).
+    Quickening is a Rails gem for adding to your model a facility to query and manage duplicate records. It's been written to remain relatively abstract and adaptable to various models, and so the library should be an easy plugin for models you may have set up already (barring name clashes).
 
     Beyond the abstracted query methods for searching efficiently throughout the table (but only tested against MySQL 5.5, sorry), your models gain access to methods for dispending with duplicates, chores varying in complexity ranging from the trivial deletes to customizable merges (future feature).
   EOD

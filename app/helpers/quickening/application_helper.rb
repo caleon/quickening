@@ -1,4 +1,4 @@
-module CloneWars
+module Quickening
   module ApplicationHelper
   end
 end

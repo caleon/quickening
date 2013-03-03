@@ -9,7 +9,7 @@ require "sprockets/railtie"
 # require "rails/test_unit/railtie"
 
 Bundler.require
-require "clone-wars"
+require "quickening"
 
 module Dummy
   class Application < Rails::Application

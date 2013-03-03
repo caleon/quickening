@@ -1,8 +1,8 @@
 # encoding: utf-8
 
-namespace :clonewars do
+namespace :quickening do
   # desc "Explaining what the task does"
-  # task :clone-wars do
+  # task :quickening do
   #   # Task goes here
   # end
 end

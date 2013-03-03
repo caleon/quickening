@@ -1,2 +1,2 @@
-CloneWars::Engine.routes.draw do
+Quickening::Engine.routes.draw do
 end

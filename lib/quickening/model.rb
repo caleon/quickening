@@ -2,11 +2,11 @@
 
 require 'active_support/concern'
 
-module CloneWars
-  # == CloneWars::Model
+module Quickening
+  # == Quickening::Model
   #
   # Module to include within your ActiveRecord::Base class definitions, either
-  # manually or via the +clone_wars+ class method.
+  # manually or via the +quickening+ class method.
   module Model
     extend ActiveSupport::Concern
 
@@ -32,7 +32,7 @@ module CloneWars
       # better solution is pursued.
       #
       # Also it's worth considering making +duplicate_matchers+ unwritable even
-      # at the class level once it's been set via +clone_wars+. The fact that it
+      # at the class level once it's been set via +quickening+. The fact that it
       # would be inserted as a raw string in the midst of a query is undesirable
       # from a security standpoint.
       #++
@@ -127,7 +127,7 @@ module CloneWars
     # this:
     #
     #   class User < ActiveRecord::Base
-    #     clone_wars :last_name, :ssn
+    #     quickening :last_name, :ssn
     #     ..
     #   end
     #
@@ -160,15 +160,15 @@ module CloneWars
     # you might just want to follow the module extension scheme instead:
     #
     #   class User < ActiveRecord::Base
-    #     clone_wars [..]
+    #     quickening [..]
     #
     #     # Custom overrides:
-    #     module MyCloneWars
+    #     module DuncanMacLeod
     #       def _duplicate_conditions
     #         @temporary_conditions || super
     #       end
     #     end
-    #     include MyCloneWars
+    #     include DuncanMacLeod
     #     ..
     #   end
     def _duplicate_conditions

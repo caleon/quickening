@@ -23,7 +23,6 @@ shared_context 'Proper .duplicate results' do
   end
 
   it 'returns the results in an ascending order by id' do
-    # klass.stub_chain(:select, :uniq, :from, :joins, :where) { mock_relation.as_null_object }
     klass.stub_chain(:select, :uniq, :joins, :where) { mock_relation.as_null_object }
 
     mock_relation.should_receive(:order).with(/id/) { null_relation }
@@ -31,7 +30,6 @@ shared_context 'Proper .duplicate results' do
   end
 
   it 'limits the result size to 0 by default' do
-    # klass.stub_chain(:select, :uniq, :from, :joins, :where, :order) { mock_relation.as_null_object }
     klass.stub_chain(:select, :uniq, :joins, :where, :order) { mock_relation.as_null_object }
     mock_relation.should_receive(:limit).with(0)
     returned
@@ -45,14 +43,12 @@ shared_context 'Proper .duplicate results' do
     end
 
     it 'returns the results in an ascending order by id' do
-      # klass.stub_chain(:select, :uniq, :from, :joins, :where) { mock_relation.as_null_object }
       klass.stub_chain(:select, :uniq, :joins, :where) { mock_relation.as_null_object }
       mock_relation.should_receive(:order).with(/id/) { null_relation }
       returned
     end
 
     it 'does not limit the result size to 0' do
-      # klass.stub_chain(:select, :uniq, :from, :joins, :where, :order) { mock_relation.as_null_object }
       klass.stub_chain(:select, :uniq, :joins, :where, :order) { mock_relation.as_null_object }
       mock_relation.should_receive(:limit).with(nil)
       returned

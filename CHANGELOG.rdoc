@@ -5,6 +5,7 @@
 
 * Todo
   * Come up with a less silly name?
+  * Update: Changed name of gem
 
 == 0.0.3
 

@@ -2,24 +2,24 @@
 
 require 'spec_helper'
 
-describe CloneWars do
+describe Quickening do
   subject(:mod) { described_class }
   it { should be_a Module }
 
-  describe CloneWars::VERSION do
-    subject(:konstant) { CloneWars::VERSION }
+  describe Quickening::VERSION do
+    subject(:konstant) { Quickening::VERSION }
 
     it { should be_a String }
     it { should =~ /^(\d+\.){2,}\d+$/ }
     it { should be > '0.0.0' }
   end
 
-  describe CloneWars::Model do
+  describe Quickening::Model do
     subject(:mod) { described_class }
     it { should be_a Module }
   end
 
-  describe CloneWars::ORM::ActiveRecord do
+  describe Quickening::ORM::ActiveRecord do
     subject(:mod) { described_class }
     it { should be_a Module }
   end
@@ -35,8 +35,8 @@ describe 'Dummy App' do
 
       its(:superclass) { should be ActiveRecord::Base }
 
-      it { should respond_to :clone_wars }
-      it { should_not include CloneWars::Model }
+      it { should respond_to :quickening }
+      it { should_not include Quickening::Model }
       it { should_not respond_to :duplicate_matchers }
       it { should_not respond_to :duplicate_matchers= }
       it { should_not respond_to :duplicate }
@@ -53,7 +53,7 @@ describe 'Dummy App' do
 
         it { should be_a klass }
         it { should be_a ActiveRecord::Base }
-        it { should_not be_a CloneWars::Model }
+        it { should_not be_a Quickening::Model }
 
         it { should_not respond_to :duplicate_matchers }
         it { should_not respond_to :duplicate_matchers= }
@@ -62,14 +62,14 @@ describe 'Dummy App' do
     end
   end
 
-  context 'when clone_wars is called in the class' do
+  context 'when quickening is called in the class' do
     let(:klass) { User }
 
     describe 'the enabled class' do
       subject { klass }
 
-      it { should respond_to :clone_wars }
-      it { should include CloneWars::Model }
+      it { should respond_to :quickening }
+      it { should include Quickening::Model }
       it { should respond_to :duplicate_matchers }
       it { should respond_to :duplicate_matchers= }
       it { should respond_to :duplicate }
@@ -90,7 +90,7 @@ describe 'Dummy App' do
 
         it { should be_a klass }
         it { should be_a ActiveRecord::Base }
-        it { should be_a CloneWars::Model }
+        it { should be_a Quickening::Model }
 
         it { should respond_to :duplicate_matchers }
         it { should_not respond_to :duplicate_matchers= }
