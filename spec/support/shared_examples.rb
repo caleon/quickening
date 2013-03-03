@@ -96,6 +96,7 @@ shared_context 'Proper .copies results' do
 
   it 'restricts the results to those which are not the earliest created records' do
     ActiveRecord::Relation.any_instance.should_receive(:except).with(:limit) { mock_relation.as_null_object }
+    # This tests things at too low a level; breaks everytime a tiny thing changes.
     # mock_relation.stub(:where) do |arg|
     #   sql = arg
     #   expect(sql).to match(/ < /)
