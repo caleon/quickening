@@ -21,7 +21,7 @@ Gem::Specification.new do |s|
 
   s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.md", "CHANGELOG.rdoc"]
 
-  s.required_ruby_version '>= 1.9.2'
+  s.required_ruby_version = '>= 1.9.2'
 
   s.add_dependency 'rails', '~> 3.2.12'
   s.add_dependency 'activerecord', '~> 3.2.12'
