@@ -23,13 +23,16 @@ shared_context 'Proper .duplicate results' do
   end
 
   it 'returns the results in an ascending order by id' do
-    klass.stub_chain(:select, :uniq, :from, :joins, :where) { mock_relation }
+    # klass.stub_chain(:select, :uniq, :from, :joins, :where) { mock_relation.as_null_object }
+    klass.stub_chain(:select, :uniq, :joins, :where) { mock_relation.as_null_object }
+
     mock_relation.should_receive(:order).with(/id/) { null_relation }
     returned
   end
 
   it 'limits the result size to 0 by default' do
-    klass.stub_chain(:select, :uniq, :from, :joins, :where, :order) { mock_relation }
+    # klass.stub_chain(:select, :uniq, :from, :joins, :where, :order) { mock_relation.as_null_object }
+    klass.stub_chain(:select, :uniq, :joins, :where, :order) { mock_relation.as_null_object }
     mock_relation.should_receive(:limit).with(0)
     returned
   end
@@ -42,13 +45,15 @@ shared_context 'Proper .duplicate results' do
     end
 
     it 'returns the results in an ascending order by id' do
-      klass.stub_chain(:select, :uniq, :from, :joins, :where) { mock_relation }
+      # klass.stub_chain(:select, :uniq, :from, :joins, :where) { mock_relation.as_null_object }
+      klass.stub_chain(:select, :uniq, :joins, :where) { mock_relation.as_null_object }
       mock_relation.should_receive(:order).with(/id/) { null_relation }
       returned
     end
 
     it 'does not limit the result size to 0' do
-      klass.stub_chain(:select, :uniq, :from, :joins, :where, :order) { mock_relation }
+      # klass.stub_chain(:select, :uniq, :from, :joins, :where, :order) { mock_relation.as_null_object }
+      klass.stub_chain(:select, :uniq, :joins, :where, :order) { mock_relation.as_null_object }
       mock_relation.should_receive(:limit).with(nil)
       returned
     end
@@ -90,12 +95,12 @@ shared_context 'Proper .copies results' do
   end
 
   it 'restricts the results to those which are not the earliest created records' do
-    ActiveRecord::Relation.any_instance.should_receive(:except).with(:limit) { mock_relation }
-    mock_relation.stub(:where) do |arg|
-      sql = arg
-      expect(sql).to match(/ < /)
-      expect(sql).not_to match(/ > /)
-    end
+    ActiveRecord::Relation.any_instance.should_receive(:except).with(:limit) { mock_relation.as_null_object }
+    # mock_relation.stub(:where) do |arg|
+    #   sql = arg
+    #   expect(sql).to match(/ < /)
+    #   expect(sql).not_to match(/ > /)
+    # end
     returned
   end
 
@@ -111,7 +116,7 @@ shared_context 'Proper .find_duplicates_for results' do
 
   it 'utilizes the instance-level conditions helper' do
     user.should_receive(:_duplicate_conditions) { :helper_return }
-    klass.should_receive(:where).with(:helper_return) { null_relation }
+    klass.should_receive(:where).with(:helper_return) { null_relation.as_null_object }
     returned
   end
 

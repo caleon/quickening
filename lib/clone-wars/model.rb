@@ -58,13 +58,23 @@ module CloneWars
       #       #<User id: 5 name: 'Marla Singer', code: 32 ..>,
       #       #<User id: 7 name: 'tylerdurden', code: 1 ..>,
       #       #<User id: 8 name: 'tyler durden', code: 1 ..>]
+      # scope :duplicate, ->(opts = {}) {
+      #   select("`#{table_name}`.*").uniq.from("`#{table_name}` a2").
+      #   joins("INNER JOIN `#{table_name}` USING (#{duplicate_matchers * ', '})").
+      #   where("`#{table_name}`.`id` != `a2`.`id`").
+      #   order("`#{table_name}`.`id`").
+      #   limit(opts[:force] ? nil : 0)
+      # } do
+
       scope :duplicate, ->(opts = {}) {
-        select("`#{table_name}`.*").uniq.from("`#{table_name}` a2").
-        joins("INNER JOIN `#{table_name}` USING (#{duplicate_matchers * ', '})").
+        select("`#{table_name}`.*").
+        uniq.
+        joins("INNER JOIN `#{table_name}` a2 USING (#{duplicate_matchers * ', '})").
         where("`#{table_name}`.`id` != `a2`.`id`").
         order("`#{table_name}`.`id`").
         limit(opts[:force] ? nil : 0)
       } do
+
 
         ##
         # Returns a collection of all originals within each respective set of
@@ -76,7 +86,7 @@ module CloneWars
         #   # => [#<User id: 1 name: 'Bruce Wayne', code: nil ..>,
         #         #<User id: 3 name: 'Syrio Forel', code: 50 died_on: "2013-03-01" ..>]
         def originals
-          except(:limit).uniq(false).group(duplicate_matchers).
+          except(:limit).group(duplicate_matchers).
             having("`#{table_name}`.`id` = MIN(`#{table_name}`.`id`)")
         end
 
@@ -85,7 +95,8 @@ module CloneWars
         #   # => [#<User id: 2 name: 'Bruce Wayne', code: nil ..>,
         #         #<User id: 4 name: 'syrio forel', code: 50 died_on: nil ..>]
         def copies
-          except(:limit).where("`a2`.`id` < `#{table_name}`.`id`")
+          # except(:limit).where("`a2`.`id` < `#{table_name}`.`id`")
+          except(:limit).where("`#{table_name}`.`id` > `a2`.`id`")
         end
       end
     end
